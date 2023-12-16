@@ -38,7 +38,7 @@ jobs:
         pip3 install torch torchvision torchaudio
     - name: Run Pyinstaller 1      
       run: |
-        pyinstaller -c -p "./gym_go"  --add-data "./gym_go;gym_go" --add-data="./sigmago.pt;."  -F ./sigmago.py
+        pyinstaller -c -p "./gym_go"  --add-data "./model;model" --add-data "./gym_go;gym_go" --add-data="./sigmago.pt;."  -F ./sigmago.py
         
     - uses: actions/upload-artifact@v3
       with:
