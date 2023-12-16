@@ -3,12 +3,79 @@ from policy import *
 import warnings
 import argparse
 import sys
+import gym
+from gym.envs.registration import register
+import torch
+from model import SimpleCNN
+import warnings
+
 parser = argparse.ArgumentParser()
 
 warnings.filterwarnings("ignore")
 
-parser.add_argument('-m', type=str, default='sigmago.pt', help='Path to save the trained models')
-args = parser.parse_args()
+parser.add_argument('-m', type=str, default='sigmago_v1.pt', help='Path to save the trained models')
+args_main = parser.parse_args()
+
+warnings.filterwarnings("ignore")
+register(id='go_v0',  entry_point='gym_go.envs:GoEnv')
+
+# 加載您的模型
+from os.path import abspath, dirname
+script_path = dirname(abspath(__file__))
+model = SimpleCNN(num_classes=81)
+model = torch.load(f'{script_path}/model/{args_main.m}', map_location=torch.device('cpu'))
+model.eval()
+
+global go_env
+go_env = gym.make('go_v0', size=9, komi=0, reward_method='real')
+state = go_env.reset()
+
+
+
+def op_move(coord): #opponent move
+    if coord == 'pass':
+        player_step = 81
+    else:
+        player_step = go_coord_to_xy(coord) # 將圍棋座標轉成X, Y型式，從零開始
+    state, reward, done, info = go_env.step(player_step)
+    return 1
+
+
+def get_next_step(player_move,color):
+
+    if player_move == 'pass':
+        result = 81
+        state, reward, done, info = go_env.step(81)
+        return 'pass'
+
+    state = go_env.state()
+    board = state[0]*-1 + state[1]
+    #print(board)
+    #print(player_move)
+    if color == 'B':
+        board *= -1
+    board_d = board[None,...][None, ...]
+    board_d = torch.from_numpy(board_d).to('cpu').float()
+    logits = model(board_d)
+    result0 = logits.cpu().detach().numpy()
+    result = get_idx(result0, state[3].flatten())
+
+    if result == 81:
+        return 'pass'
+
+    next_step_x = result // 9
+    next_step_y = result % 9
+    x = (next_step_x, next_step_y)
+    state, reward, done, info = go_env.step(x)
+    go_step = xy_to_go_coord(next_step_x, next_step_y)
+
+    return go_step
+
+def cmd_reset(komi):
+    global go_env
+    go_env = gym.make('go_v0', size=9, komi=komi, reward_method='real')
+    go_env.reset()
+    return 1
 
 class SimpleGTP:
 
@@ -16,7 +83,7 @@ class SimpleGTP:
         self.board_size = 9  # Default board size
         self.game_over = False
         self.player_move = ''
-        self.model_path = args.m
+        self.model_path = args_main.m
         self.commands = {
             'name': self.get_name,
             'version': self.get_version,
@@ -49,7 +116,7 @@ class SimpleGTP:
             return '? unknown command\n\n'
 
     def get_name(self, args):
-        return '= Sigma Go\n\n'
+        return f'= Sigma Go {args_main.m}\n\n'
 
     def get_version(self, args):
         return '= 0.0.1\n\n'
