@@ -42,5 +42,5 @@ jobs:
         
     - uses: actions/upload-artifact@v3
       with:
-        name: $SigmaGo-${{ matrix.os }}
+        name: SigmaGo-${{ matrix.os }}
         path: dist/*
