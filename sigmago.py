@@ -1,17 +1,22 @@
 from model import SimpleCNN
 from policy import *
 import warnings
+import argparse
+
+parser = argparse.ArgumentParser()
 
 warnings.filterwarnings("ignore")
 
+parser.add_argument('-m', type=str, default='sigmago.pt', help='Path to save the trained models')
+args = parser.parse_args()
 
-    
 class SimpleGTP:
 
     def __init__(self):
         self.board_size = 9  # Default board size
         self.game_over = False
         self.player_move = ''
+        self.model_path = args.m
         self.commands = {
             'name': self.get_name,
             'version': self.get_version,
@@ -47,7 +52,8 @@ class SimpleGTP:
         return '= Sigma Go\n\n'
 
     def get_version(self, args):
-        return '= 0.0.1\n\n'
+        #return '= 0.0.1\n\n'
+        return f'{self.model_path}\n\n'
 
     def get_protocol_version(self, args):
         return '= 2\n\n'
