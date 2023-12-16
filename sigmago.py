@@ -2,7 +2,7 @@ from model import SimpleCNN
 from policy import *
 import warnings
 import argparse
-
+import sys
 parser = argparse.ArgumentParser()
 
 warnings.filterwarnings("ignore")
@@ -52,8 +52,8 @@ class SimpleGTP:
         return '= Sigma Go\n\n'
 
     def get_version(self, args):
-        #return '= 0.0.1\n\n'
-        return f'{self.model_path}\n\n'
+        return '= 0.0.1\n\n'
+        #return f'{self.model_path}\n\n'
 
     def get_protocol_version(self, args):
         return '= 2\n\n'
@@ -94,6 +94,7 @@ class SimpleGTP:
         # Process the move for the given color
         self.player_move = move
         op_move(move)
+        print(self.player_move)
         return '=\n\n'
 
     def generate_move(self, args):
@@ -104,7 +105,7 @@ class SimpleGTP:
         next_step = get_next_step(self.player_move,args[0])
         #now = self.player_move
         #print(self.player_move)
-        return f'= {next_step}\n\n  '  # Example move
+        return f'= {next_step}\n\n'  # Example move
 
     def quit(self, args):
         self.game_over = True
