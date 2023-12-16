@@ -67,7 +67,7 @@ def op_move(coord): #opponent move
     return 1
 
 
-def get_next_step(player_move):
+def get_next_step(player_move,color):
 
     if player_move == 'pass':
         result = 81
@@ -77,6 +77,9 @@ def get_next_step(player_move):
     state = go_env.state()
     board = state[0]*-1 + state[1]
     #print(board)
+    #print(player_move)
+    if color == 'B':
+        board *= -1
     board_d = board[None,...][None, ...]
     board_d = torch.from_numpy(board_d).to('cpu').float()
     logits = model(board_d)

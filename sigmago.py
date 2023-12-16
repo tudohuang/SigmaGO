@@ -95,8 +95,10 @@ class SimpleGTP:
             return '? unknown player\n\n'
         # Generate a move for the given color
         # Placeholder implementation
-        next_step = get_next_step(self.player_move)
-        return f'= {next_step}\n\n'  # Example move
+        next_step = get_next_step(self.player_move,args[0])
+        #now = self.player_move
+        #print(self.player_move)
+        return f'= {next_step}\n\n  '  # Example move
 
     def quit(self, args):
         self.game_over = True
