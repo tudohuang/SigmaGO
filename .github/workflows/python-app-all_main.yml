@@ -20,8 +20,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['windows-latest', 'ubuntu-20.04', 'macos-latest']
-        #os: ['windows-latest']
+        #os: ['windows-latest', 'ubuntu-20.04', 'macos-latest']
+        os: ['windows-latest']
         #py: ['bx']
 
     steps:
@@ -38,7 +38,7 @@ jobs:
         pip3 install torch torchvision torchaudio
     - name: Run Pyinstaller 1      
       run: |
-        pyinstaller -c -p ./gym_go  --add-data "./sigmago.pt" -F ./sigmago.py
+        pyinstaller -c -p ./gym_go  --add-data="./sigmago.pt;." -F ./sigmago.py
         
     - uses: actions/upload-artifact@v3
       with:
