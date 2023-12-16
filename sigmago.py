@@ -23,7 +23,7 @@ register(id='go_v0',  entry_point='gym_go.envs:GoEnv')
 from os.path import abspath, dirname
 script_path = dirname(abspath(__file__))
 model = SimpleCNN(num_classes=81)
-model = torch.load(f'{script_path}/model/{args_main.m}', map_location=torch.device('cpu'))
+model = torch.load(f'{script_path}/models/{args_main.m}', map_location=torch.device('cpu'))
 model.eval()
 
 global go_env

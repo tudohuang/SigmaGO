@@ -34,11 +34,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip        
         pip install .
-        pip install pyinstaller gym
+        pip install pyinstaller gym pyglet
         pip3 install torch torchvision torchaudio
     - name: Run Pyinstaller 1      
       run: |
-        pyinstaller -c -p "./gym_go"  --add-data "./model;model" --add-data "./gym_go;gym_go" --add-data="./sigmago.pt;."  -F ./sigmago.py
+        pyinstaller -c -p "./gym_go"  --add-data "./models;models" --add-data "./gym_go;gym_go" --add-data="./sigmago.pt;."  -F ./sigmago.py
         
     - uses: actions/upload-artifact@v3
       with:
