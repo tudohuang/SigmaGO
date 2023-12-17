@@ -13,19 +13,7 @@ class GTPSubProcess(object):
         self.label = label
         self.subprocess = Popen(args, stdin=PIPE, stdout=PIPE)
         print("{} subprocess created".format(label))
-
-    def sendX(self, data):
-        print("sending {}: {}".format(self.label, data))
-        self.subprocess.stdin.write(data)
-        result = ""
-        while True:
-            data = self.subprocess.stdout.readline()
-            if not data.strip():
-                break
-            result += data
-        print("got: {}".format(result))
-        return result
-    
+   
     def send(self, data):
         print("sending {}: {}".format(self.label, data))
         self.subprocess.stdin.write(data.encode())  # 將字符串轉換為字節串
@@ -38,10 +26,6 @@ class GTPSubProcess(object):
             result += line
         print("got: {}".format(result))
         return result
-
-    def closeX(self):
-        print("quitting {} subprocess".format(self.label))
-        self.subprocess.communicate("quit\n")
 
     def close(self):
         print("quitting {} subprocess".format(self.label))
@@ -104,17 +88,20 @@ def parse_score(score):
 GNUGO = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp"]
 GNUGO_LEVEL_ONE = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--level", "10"]
 GNUGO_MONTE_CARLO = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--monte-carlo"]
-SIGMAGO = ["c:\\Anaconda4\\python.exe", "C:\\GO\\SigmaGo\\sigmago.py"]
+SIGMAGO = ["c:\\Anaconda4\\python.exe", "C:\\GO\\SigmaGo\\sigmago.py", "-m" ,"sigmago_v1.pt"]
 
 
-import tqdm
 
+print(GNUGO_LEVEL_ONE)
+print(SIGMAGO)
 
 
 eng1 = GTPFacade("GNUGO", GNUGO_LEVEL_ONE)
 eng2 = GTPFacade("SIGMAGO", SIGMAGO)
+
+import tqdm
 for black, white in ([eng1, eng2], [eng2, eng1]):
-    pbar = tqdm.tqdm(range(100))
+    pbar = tqdm.tqdm(range(50))
     white_win = 0
     for ii in pbar:
         # 創建一個 StringIO 物件來捕獲輸出
