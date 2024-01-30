@@ -6,6 +6,7 @@ from gtp import parse_vertex, gtp_move, gtp_color
 from gtp import BLACK, WHITE, PASS
 import sys
 import io
+model_arg = sys.argv[1]
 
 class GTPSubProcess(object):
 
@@ -86,12 +87,13 @@ def parse_score(score):
         return 0
 
 GNUGO = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp"]
-GNUGO_LEVEL_ONE = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--level", "10"]
+#GNUGO_LEVEL_ONE = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--level", "10"]
 GNUGO_MONTE_CARLO = ["C:\\GO\\gnugo-3.8\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--monte-carlo"]
-SIGMAGO = ["c:\\Anaconda4\\python.exe", "C:\\GO\\SigmaGo\\sigmago.py", "-m" ,"sigmago_v1.pt"]
+#SIGMAGO = ["c:\\Anaconda4\\python.exe", "C:\\GO\\SigmaGo\\sigmago.py", "-m" ,"sigmago_v1.pt"]
 
 
-
+GNUGO_LEVEL_ONE = ["C:\\Users\\tudoh\\Downloads\\gnugo-3.8\\gnugo.exe", "--mode", "gtp", "--level", model_arg]
+SIGMAGO = ["C:\\Users\\tudoh\\anaconda4\\python.exe","C:\\Gdrive_tudo\\github\\SigmaGO\\sigmago.py","-m","sigmago_v1.pt" ]
 print(GNUGO_LEVEL_ONE)
 print(SIGMAGO)
 
@@ -101,7 +103,7 @@ eng2 = GTPFacade("SIGMAGO", SIGMAGO)
 
 import tqdm
 for black, white in ([eng1, eng2], [eng2, eng1]):
-    pbar = tqdm.tqdm(range(50))
+    pbar = tqdm.tqdm(range(1000))
     white_win = 0
     for ii in pbar:
         # 創建一個 StringIO 物件來捕獲輸出
