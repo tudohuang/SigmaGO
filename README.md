@@ -1,6 +1,8 @@
 # SigmaGO
 ## Description
-這是受到AlphaGO、ZeelaGO、GNUGO等著名圍棋機器人啟發，開發的圍棋機器人。以沒有池化層(Pooling)的捲積神經網路(CNN)為主體，以[GymGO](https://github.com/aigagror/GymGo)為輔助，判斷此步是否合法。而訓練資料則是使用了超過34572個[Sgf(Smartgameformat)檔案](https://github.com/ymgaq/Pyaq)，並加以旋轉、翻轉、平移以製造出更多的變化。在訓練50000多次後，將當局棋勢丟入模型，產出81格中，每一格的機率，如下圖:![下載 (4)](https://github.com/tudohuang/SigmaGO/assets/88125758/78a80e12-458f-40ab-b07d-cefe9fc9f384)
+這是受到AlphaGO、ZeelaGO、GNUGO等著名圍棋機器人啟發，開發的圍棋機器人。以沒有池化層(Pooling)的捲積神經網路(CNN)為主體，以[GymGO](https://github.com/aigagror/GymGo)為輔助，判斷此步是否合法。而訓練資料則是使用了超過34572個[Sgf(Smartgameformat)檔案](https://github.com/ymgaq/Pyaq)，並加以旋轉、翻轉、平移以製造出更多的變化。在訓練50000多次後，將當局棋勢丟入模型，產出81格中，每一格的機率，如下圖:
+
+![下載 (4)](https://github.com/tudohuang/SigmaGO/assets/88125758/78a80e12-458f-40ab-b07d-cefe9fc9f384)
 
 接著再以[Softmax算法](https://zh.wikipedia.org/zh-tw/Softmax%E5%87%BD%E6%95%B0)取出最大值，將矩陣座標轉換成圍棋棋盤座標，以[GTP(Go Text Protocol)](https://www.gnu.org/software/gnugo/gnugo_19.html)輸出，使用以Electron打造的[Sabaki](https://github.com/SabakiHQ/Sabaki)，與人類、機器人進行對戰。
 
